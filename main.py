@@ -49,8 +49,8 @@ def main():
         line_num_pattern = re.compile(r'(?<=\+).+')
         addition_pattern = re.compile(r'(?<=^\+).*')
         deletion_pattern = re.compile(r'(?<=^-).*')
-        todo_pattern = re.compile(r'(?<=' + label + r'\s).+')
-        comment_pattern = re.compile(r'(?<=' + comment_marker + r'\s).+')
+        todo_pattern = re.compile(r'(?<=' + re.escape(label) + r'\s).+')
+        comment_pattern = re.compile(r'(?<=' + re.escape(comment_marker) + r'\s).+')
 
         new_issues = []
         closed_issues = []
