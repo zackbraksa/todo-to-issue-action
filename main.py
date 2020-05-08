@@ -18,7 +18,7 @@ def main():
     sha = os.getenv('INPUT_SHA')
     comment_marker = os.getenv('INPUT_COMMENT_MARKER')
     label = os.getenv('INPUT_LABEL')
-    include_ext = [x for x in (None or os.getenv('INPUT_INCLUDE_EXT')).split(",") if x != ""] 
+    include_ext = [x for x in (os.getenv('INPUT_INCLUDE_EXT') or "").split(",") if x != ""] 
         
     
     params = {
