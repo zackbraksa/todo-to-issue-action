@@ -18,6 +18,9 @@ def main():
     sha = os.getenv('INPUT_SHA')
     comment_marker = os.getenv('INPUT_COMMENT_MARKER')
     label = os.getenv('INPUT_LABEL')
+    include_ext = [x for x in (None or os.getenv('INPUT_INCLUDE_EXT')).split(",") if x != ""] 
+        
+    
     params = {
         'access_token': os.getenv('INPUT_TOKEN')
     }
@@ -151,6 +154,10 @@ def main():
             if len(title) > 50:
                 title = title[:50] + '...'
             file = issue['file']
+            
+            if 0 == len([x for x in include_ext if file.endswith(x)]):
+                continue
+            
             line = issue['line_num']
             body = issue['body'] + '\n\n' + f'https://github.com/{repo}/blob/{sha}/{file}#L{line}'
             if 'hunk' in issue:
