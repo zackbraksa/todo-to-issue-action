@@ -18,17 +18,16 @@ def main():
     sha = os.getenv('INPUT_SHA')
     comment_marker = os.getenv('INPUT_COMMENT_MARKER')
     label = os.getenv('INPUT_LABEL')
-    include_ext = [x for x in (os.getenv('INPUT_INCLUDE_EXT') or "").split(",") if x != ""] 
-        
-    
-    params = {
-        'access_token': os.getenv('INPUT_TOKEN')
-    }
+    include_ext = [x for x in (os.getenv('INPUT_INCLUDE_EXT') or "").split(",") if x != ""]
+    token = os.getenv('INPUT_TOKEN')
+
+    params = {}
 
     # Let's compare the last two pushed commits.
     diff_url = f'{base_url}{repo}/compare/{before}...{sha}'
     diff_headers = {
-        'Accept': 'application/vnd.github.v3.diff'
+        'Accept': 'application/vnd.github.v3.diff',
+        'Authorization': f'token {token}'
     }
 
     # Load a file so we can see what language each file is written in and apply highlighting later.
@@ -147,6 +146,7 @@ def main():
         issues_url = f'{base_url}{repo}/issues'
         issue_headers = {
             'Content-Type': 'application/json',
+            'Authorization': f'token {token}'
         }
         for i, issue in enumerate(new_issues):
             title = issue['todo']
@@ -154,10 +154,10 @@ def main():
             if len(title) > 50:
                 title = title[:50] + '...'
             file = issue['file']
-            
+
             if 0 == len([x for x in include_ext if file.endswith(x)]):
                 continue
-            
+
             line = issue['line_num']
             body = issue['body'] + '\n\n' + f'https://github.com/{repo}/blob/{sha}/{file}#L{line}'
             if 'hunk' in issue:
